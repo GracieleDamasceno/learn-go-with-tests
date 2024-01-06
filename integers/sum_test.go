@@ -6,10 +6,10 @@ func TestSum(t *testing.T) {
 	sum := Add(2, 2)
 	want := 4
 
-	assertStrings(sum, want, t)
+	assertIntegers(sum, want, t)
 }
 
-func assertStrings(got int, want int, t testing.TB) {
+func assertIntegers(got int, want int, t testing.TB) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
