@@ -3,7 +3,7 @@ package pointerserrors
 import "testing"
 
 func TestWallet(t *testing.T) {
-	t.Run("depositing bitcoin", func(t *testing.T) {
+	t.Run("deposit bitcoin", func(t *testing.T) {
 		wallet := Wallet{}
 		wallet.Deposit(Bitcoin(10))
 
