@@ -2,23 +2,47 @@ package mocking
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
 func TestCountdown(t *testing.T) {
-	buffer := &bytes.Buffer{}
-	spySleeper := &SpySleeper{}
+	t.Run("countdown from 3 and Go!", func(t *testing.T) {
+		buffer := &bytes.Buffer{}
+		Countdown(buffer, &SpyCountdownOperations{})
 
-	Countdown(buffer, spySleeper)
-
-	got := buffer.String()
-	want := `3
+		got := buffer.String()
+		want := `3
 2
 1
 Go!`
 
-	assertStrings(got, want, t)
-	assertInteger(spySleeper.Calls, 3, t)
+		assertStrings(got, want, t)
+	})
+
+	t.Run("sleep before every print", func(t *testing.T) {
+		spySleepPrinter := &SpyCountdownOperations{}
+		Countdown(spySleepPrinter, spySleepPrinter)
+
+		want := []string{
+			write,
+			sleep,
+			write,
+			sleep,
+			write,
+			sleep,
+			write,
+		}
+
+		assertDeepCopy(want, spySleepPrinter, t)
+	})
+}
+
+func assertDeepCopy(want []string, got *SpyCountdownOperations, t *testing.T) {
+	t.Helper()
+	if !reflect.DeepEqual(want, got.Calls) {
+		t.Errorf("wanted %v got %v", want, got.Calls)
+	}
 }
 
 func assertStrings(got string, want string, t testing.TB) {
